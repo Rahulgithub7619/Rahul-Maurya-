@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>श्री बालाजी टिफिन सर्विस | Shree Balaji Tiffin Service</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            saffron: {
+              DEFAULT: '#FF6F00',
+              50: '#FFF3E0',
+              100: '#FFE0B2',
+              500: '#FF6F00',
+              600: '#E65100',
+              700: '#BF360C'
+            },
+            indiagreen: {
+              DEFAULT: '#2E7D32',
+              50: '#E8F5E9',
+              100: '#C8E6C9',
+              600: '#2E7D32',
+              700: '#1B5E20'
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+  <!-- Main Container -->
+  <div id="app" class="max-w-md mx-auto min-h-screen bg-slate-50 dark:bg-slate-950 shadow-2xl relative flex flex-col pb-24">
+    
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-full bg-saffron flex items-center justify-center text-white font-black text-xl shadow-md">
+          🍱
+        </div>
+        <div>
+          <h1 id="brand-title" class="font-extrabold text-base tracking-tight text-slate-900 dark:text-white leading-tight">श्री बालाजी टिफिन</h1>
+          <p id="brand-subtitle" class="text-xs text-saffron font-bold flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-indiagreen animate-ping inline-block"></span>
+            जयपुर घर का स्वाद • Fresh Tiffins
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- APK Download Button -->
+        <a href="/app-debug.apk" download class="bg-indiagreen hover:bg-indiagreen-700 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow transition">
+          <span>📱</span> <span class="hidden sm:inline">APK</span>
+        </a>
+
+        <!-- Lang Switch -->
+        <button onclick="toggleLang()" class="bg-slate-100 dark:bg-slate-800 text-saffron font-bold text-xs px-2 py-1.5 rounded-lg border border-saffron/20">
+          <span id="lang-btn-text">EN</span>
+        </button>
+
+        <!-- Role Select -->
+        <select id="role-select" onchange="changeRole(this.value)" class="bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 py-1.5 px-2 rounded-lg border border-slate-200 dark:border-slate-700 outline-none">
+          <option value="CUSTOMER">👤 Customer</option>
+          <option value="ADMIN">🛠️ Admin Portal</option>
+          <option value="DELIVERY_BOY">🛵 Partner App</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Content Screen Area -->
+    <main id="screen-container" class="flex-1 p-4 overflow-y-auto">
+      <!-- Dynamic Screen Content rendered by JS -->
+    </main>
+
+    <!-- Bottom Navigation Bar (Customer Mode) -->
+    <nav id="bottom-bar" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex items-center justify-around z-40">
+      <button onclick="nav('home')" id="nav-home" class="flex flex-col items-center gap-1 text-saffron font-bold text-xs py-1 px-3 rounded-xl transition">
+        <span class="text-lg">🏠</span>
+        <span id="lbl-nav-home">Home</span>
+      </button>
+      <button onclick="nav('menu')" id="nav-menu" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 font-medium text-xs py-1 px-3 rounded-xl transition">
+        <span class="text-lg">🍲</span>
+        <span id="lbl-nav-menu">Menu</span>
+      </button>
+      <button onclick="nav('subscription')" id="nav-subscription" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 font-medium text-xs py-1 px-3 rounded-xl transition">
+        <span class="text-lg">📅</span>
+        <span id="lbl-nav-sub">Pass</span>
+      </button>
+      <button onclick="nav('cart')" id="nav-cart" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 font-medium text-xs py-1 px-3 rounded-xl transition relative">
+        <span class="text-lg">🛒</span>
+        <span id="lbl-nav-cart">Cart</span>
+        <span id="cart-badge" class="absolute -top-1 right-1 bg-saffron text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+      </button>
+      <button onclick="nav('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 font-medium text-xs py-1 px-3 rounded-xl transition">
+        <span class="text-lg">👤</span>
+        <span id="lbl-nav-profile">Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal Container -->
+  <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="modal-content" class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl p-5 shadow-2xl relative border border-slate-200 dark:border-slate-800">
+      <!-- Dynamic Modal Content -->
+    </div>
+  </div>
+
+  <script>
+    // App State
+    let isHindi = false;
+    let isDarkMode = false;
+    let currentRole = 'CUSTOMER'; // CUSTOMER, ADMIN, DELIVERY_BOY
+    let currentScreen = 'home'; // home, menu, subscription, cart, tracking, profile
+
+    let walletBalance = 850;
+    let cart = [];
+    let appliedCoupon = null;
+    let activeOrder = null;
+    let adminActiveTab = 'menu'; // 'menu', 'inventory', 'calculator', 'notif'
+
+    // Preset High Quality Food Photos for Quick Selection
+    const photoPresets = [
+      { name: "Paneer Special", url: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&q=80" },
+      { name: "Dal Baati", url: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&q=80" },
+      { name: "Mini Tiffin", url: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&q=80" },
+      { name: "Diet Salad", url: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80" },
+      { name: "Chole Bhature", url: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=500&q=80" },
+      { name: "Biryani Rice", url: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&q=80" },
+      { name: "Gulab Jamun", url: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&q=80" }
+    ];
+
+    // Meals & Tiffin Menu Data
+    let meals = [
+      {
+        id: "m1",
+        titleEn: "Maharaja Special Thali",
+        titleHi: "महाराजा स्पेशल थाली",
+        descriptionEn: "Paneer Butter Masala, Dal Makhani, Mix Veg, 4 Butter Roti, Jeera Rice, Gulab Jamun, Salad & Raita",
+        descriptionHi: "पनीर बटर मसाला, दाल मखनी, मिक्स वेज, 4 बटर रोटी, जीरा राइस, गुलाब जामुन, रायता",
+        price: 180,
+        calories: 780,
+        category: "SPECIAL_THALI",
+        imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&q=80",
+        isAvailable: true,
+        stockCount: 40
+      },
+      {
+        id: "m2",
+        titleEn: "Rajasthani Dal Baati Churma",
+        titleHi: "राजस्थानी दाल बाटी चूरमा",
+        descriptionEn: "4 Desi Ghee Baati, Panchmel Dal, Sweet Churma, Lahsun Chutney & Butter Milk",
+        descriptionHi: "4 देसी घी बाटी, पंचमेल दाल, मीठा चूरमा, लहसुन की चटनी और छाछ",
+        price: 210,
+        calories: 890,
+        category: "SPECIAL_THALI",
+        imageUrl: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&q=80",
+        isAvailable: true,
+        stockCount: 25
+      },
+      {
+        id: "m3",
+        titleEn: "Standard Mini Tiffin",
+        titleHi: "स्टैंडर्ड मिनी टिफिन",
+        descriptionEn: "Aloo Gobhi Sabzi, Yellow Dal Tadka, 3 Phulka Roti, Steamed Rice & Pickle",
+        descriptionHi: "आलू गोभी सब्जी, पीली दाल तड़का, 3 फुल्का रोटी, चावल और अचार",
+        price: 110,
+        calories: 520,
+        category: "MINI_MEAL",
+        imageUrl: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&q=80",
+        isAvailable: true,
+        stockCount: 50
+      },
+      {
+        id: "m4",
+        titleEn: "High-Protein Fitness Thali",
+        titleHi: "हाई-प्रोटीन फिटनेस थाली",
+        descriptionEn: "Soya Chunk Curry, Boiled Chana Salad, 2 Multigrain Roti, Sprouts & Curd",
+        descriptionHi: "सोया चंक करी, उबला चना सलाद, 2 मल्टीग्रेन रोटी, अंकुरित अनाज और दही",
+        price: 160,
+        calories: 480,
+        category: "DIET_MEAL",
+        imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80",
+        isAvailable: true,
+        stockCount: 20
+      }
+    ];
+
+    // Kitchen Raw Material Inventory Data (कच्चा माल)
+    let rawMaterials = [
+      { id: "rm1", nameEn: "Atta (Wheat Flour)", nameHi: "गेहूं का आटा", stock: 45, unit: "kg", threshold: 15, costPerUnit: 40, icon: "🌾" },
+      { id: "rm2", nameEn: "Desi Ghee", nameHi: "देसी घी", stock: 12, unit: "L", threshold: 5, costPerUnit: 650, icon: "🧈" },
+      { id: "rm3", nameEn: "Fresh Paneer", nameHi: "ताजा पनीर", stock: 8, unit: "kg", threshold: 10, costPerUnit: 360, icon: "🧀" },
+      { id: "rm4", nameEn: "Yellow & Toor Dal", nameHi: "दाल (तुअर/मूंग)", stock: 25, unit: "kg", threshold: 8, costPerUnit: 140, icon: "🫘" },
+      { id: "rm5", nameEn: "Basmati Rice", nameHi: "बासमती चावल", stock: 30, unit: "kg", threshold: 10, costPerUnit: 90, icon: "🍚" },
+      { id: "rm6", nameEn: "Fresh Milk & Curd", nameHi: "दूध और दही", stock: 18, unit: "L", threshold: 10, costPerUnit: 55, icon: "🥛" },
+      { id: "rm7", nameEn: "Mustard & Refined Oil", nameHi: "कुकिंग ऑयल", stock: 22, unit: "L", threshold: 8, costPerUnit: 130, icon: "🛢️" },
+      { id: "rm8", nameEn: "Indian Spices (Masale)", nameHi: "भारतीय मसाले", stock: 6, unit: "kg", threshold: 3, costPerUnit: 400, icon: "🌶️" }
+    ];
+
+    let subscriptions = [
+      {
+        id: "SUB-801",
+        planNameEn: "Monthly Maharaja Thali Pass",
+        planNameHi: "मासिक महाराजा थाली पास",
+        mealSlot: "LUNCH",
+        totalDays: 30,
+        daysRemaining: 22,
+        startDate: "2026-07-01",
+        endDate: "2026-07-30",
+        isPaused: false,
+        skippedDates: ["2026-07-12"]
+      }
+    ];
+
+    let orders = [
+      {
+        id: "BALAJI-9482",
+        items: [{ titleEn: "Maharaja Special Thali", qty: 2, price: 180 }],
+        totalAmount: 360,
+        status: "OUT_FOR_DELIVERY",
+        createdAt: "Today, 01:15 PM",
+        estimatedDeliveryTime: "15-20 Mins",
+        driverName: "Suresh Sharma 🛵",
+        driverRating: 4.9,
+        deliveryAddress: "Flat 402, Mansarovar, Jaipur"
+      }
+    ];
+
+    // Initialize App
+    function init() {
+      render();
+    }
+
+    function toggleLang() {
+      isHindi = !isHindi;
+      document.getElementById('lang-btn-text').innerText = isHindi ? 'हिंदी' : 'EN';
+      document.getElementById('brand-title').innerText = isHindi ? 'श्री बालाजी टिफिन सर्विस' : 'Shree Balaji Tiffin';
+      document.getElementById('brand-subtitle').innerText = isHindi ? 'जयपुर घर का शुद्ध खाना' : 'Jaipur Home Style Food';
+      
+      document.getElementById('lbl-nav-home').innerText = isHindi ? 'होम' : 'Home';
+      document.getElementById('lbl-nav-menu').innerText = isHindi ? 'मेन्यू' : 'Menu';
+      document.getElementById('lbl-nav-sub').innerText = isHindi ? 'पास' : 'Pass';
+      document.getElementById('lbl-nav-cart').innerText = isHindi ? 'कार्ट' : 'Cart';
+      document.getElementById('lbl-nav-profile').innerText = isHindi ? 'प्रोफाइल' : 'Profile';
+
+      render();
+    }
+
+    function changeRole(role) {
+      currentRole = role;
+      const bottomBar = document.getElementById('bottom-bar');
+      if (role === 'CUSTOMER') {
+        bottomBar.classList.remove('hidden');
+      } else {
+        bottomBar.classList.add('hidden');
+      }
+      render();
+    }
+
+    function nav(screen) {
+      currentScreen = screen;
+      ['home', 'menu', 'subscription', 'cart', 'profile'].forEach(s => {
+        const el = document.getElementById(`nav-${s}`);
+        if (el) {
+          if (s === screen) {
+            el.className = "flex flex-col items-center gap-1 text-saffron font-bold text-xs py-1 px-3 rounded-xl transition";
+          } else {
+            el.className = "flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 font-medium text-xs py-1 px-3 rounded-xl transition";
+          }
+        }
+      });
+      render();
+    }
+
+    function addToCart(mealId) {
+      const meal = meals.find(m => m.id === mealId);
+      if (!meal) return;
+      const existing = cart.find(c => c.id === mealId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...meal, qty: 1 });
+      }
+      updateCartBadge();
+      render();
+    }
+
+    function removeFromCart(mealId) {
+      const existing = cart.find(c => c.id === mealId);
+      if (existing) {
+        existing.qty -= 1;
+        if (existing.qty <= 0) {
+          cart = cart.filter(c => c.id !== mealId);
+        }
+      }
+      updateCartBadge();
+      render();
+    }
+
+    function updateCartBadge() {
+      const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      if (totalQty > 0) {
+        badge.innerText = totalQty;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    // Render dispatcher
+    function render() {
+      const container = document.getElementById('screen-container');
+      
+      if (currentRole === 'ADMIN') {
+        container.innerHTML = renderAdminScreen();
+        return;
+      }
+
+      if (currentRole === 'DELIVERY_BOY') {
+        container.innerHTML = renderDeliveryBoyScreen();
+        return;
+      }
+
+      switch(currentScreen) {
+        case 'home':
+          container.innerHTML = renderHomeScreen();
+          break;
+        case 'menu':
+          container.innerHTML = renderMenuScreen();
+          break;
+        case 'subscription':
+          container.innerHTML = renderSubscriptionScreen();
+          break;
+        case 'cart':
+          container.innerHTML = renderCartScreen();
+          break;
+        case 'tracking':
+          container.innerHTML = renderTrackingScreen();
+          break;
+        case 'profile':
+          container.innerHTML = renderProfileScreen();
+          break;
+        default:
+          container.innerHTML = renderHomeScreen();
+      }
+    }
+
+    // HomeScreen UI
+    function renderHomeScreen() {
+      return `
+        <div class="space-y-4">
+          <!-- Banner Card -->
+          <div class="bg-gradient-to-br from-saffron to-saffron-600 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+            <div class="relative z-10">
+              <span class="bg-white/20 text-white text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                ${isHindi ? 'आज का विशेष टिफिन' : 'Today\'s Fresh Menu'}
+              </span>
+              <h2 class="text-xl font-black mt-2 leading-tight">
+                ${isHindi ? 'शुद्ध देसी घी की महाराजा थाली' : 'Desi Ghee Maharaja Thali'}
+              </h2>
+              <p class="text-xs text-amber-100 mt-1">
+                ${isHindi ? 'पनीर, दाल मखनी, रायता और 4 गरम फुल्के' : 'Paneer Masala, Dal Makhani, Curd & Hot Rotis'}
+              </p>
+              <button onclick="nav('menu')" class="mt-4 bg-white text-saffron-600 font-extrabold text-xs px-4 py-2 rounded-xl shadow hover:bg-amber-50 transition">
+                ${isHindi ? 'अभी ऑर्डर करें - ₹180 ➔' : 'Order Now - ₹180 ➔'}
+              </button>
+            </div>
+            <div class="absolute -right-4 -bottom-4 text-7xl opacity-20 select-none">🍲</div>
+          </div>
+
+          <!-- Subscription Banner Promo -->
+          <div class="bg-indiagreen-50 dark:bg-slate-800 border border-indiagreen/20 rounded-2xl p-4 flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-sm text-indiagreen-700 dark:text-indiagreen-100">
+                ${isHindi ? '30-दिनों का टिफिन पास - 20% बचाएं 🎁' : 'Monthly Tiffin Pass - Save 20% 🎁'}
+              </h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                ${isHindi ? 'निःशुल्क होम डिलीवरी • कभी भी पॉज़ करें' : 'Free Home Delivery • Pause Anytime'}
+              </p>
+            </div>
+            <button onclick="nav('subscription')" class="bg-indiagreen text-white font-bold text-xs px-3 py-2 rounded-xl">
+              ${isHindi ? 'देखें' : 'View Pass'}
+            </button>
+          </div>
+
+          <!-- Quick Active Order Card if exists -->
+          ${orders.length > 0 ? `
+            <div onclick="nav('tracking')" class="bg-white dark:bg-slate-900 border-2 border-saffron/40 rounded-2xl p-4 shadow-sm cursor-pointer hover:border-saffron transition">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-saffron flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-saffron animate-ping"></span>
+                  ${isHindi ? 'ऑर्डर रास्ते में है #' + orders[0].id : 'Order Out for Delivery #' + orders[0].id}
+                </span>
+                <span class="text-xs font-semibold text-slate-500">${orders[0].estimatedDeliveryTime}</span>
+              </div>
+              <p class="text-xs font-medium text-slate-700 dark:text-slate-300 mt-1">
+                ${orders[0].driverName} ${isHindi ? 'डिलीवर कर रहे हैं' : 'is delivering your tiffin'}
+              </p>
+            </div>
+          ` : ''}
+
+          <!-- Menu Section -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-extrabold text-base text-slate-900 dark:text-white">
+                ${isHindi ? 'आज के व्यंजन 🍲' : 'Daily Fresh Meals 🍲'}
+              </h3>
+              <button onclick="nav('menu')" class="text-xs font-bold text-saffron">
+                ${isHindi ? 'सब देखें ➔' : 'View All ➔'}
+              </button>
+            </div>
+
+            <div class="space-y-3">
+              ${meals.map(m => renderMealCard(m)).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Helper Meal Card
+    function renderMealCard(m) {
+      const cartItem = cart.find(c => c.id === m.id);
+      const qty = cartItem ? cartItem.qty : 0;
+      const isOutOfStock = !m.isAvailable || (m.stockCount !== undefined && m.stockCount <= 0);
+
+      return `
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 border border-slate-200/80 dark:border-slate-800 flex gap-3 shadow-sm ${isOutOfStock ? 'opacity-75' : ''}">
+          <img src="${m.imageUrl}" alt="${m.titleEn}" class="w-24 h-24 rounded-xl object-cover shrink-0" />
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white leading-tight">
+                  ${isHindi ? m.titleHi : m.titleEn}
+                </h4>
+                <span class="text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-slate-800 dark:text-amber-300 px-1.5 py-0.5 rounded shrink-0">
+                  🔥 ${m.calories} kcal
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                ${isHindi ? m.descriptionHi : m.descriptionEn}
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <span class="font-extrabold text-base text-indiagreen">₹${m.price}</span>
+                ${m.stockCount !== undefined ? `
+                  <span class="text-[10px] font-bold block ${m.stockCount > 5 ? 'text-slate-400' : 'text-rose-500'}">
+                    ${m.stockCount > 0 ? (isHindi ? `स्टॉक: ${m.stockCount} शेष` : `Stock: ${m.stockCount} left`) : (isHindi ? 'सोलड आउट' : 'Out of Stock')}
+                  </span>
+                ` : ''}
+              </div>
+
+              ${isOutOfStock ? `
+                <span class="bg-slate-200 dark:bg-slate-800 text-slate-500 text-[11px] font-extrabold px-3 py-1.5 rounded-xl">
+                  ${isHindi ? 'उपलब्ध नहीं' : 'UNAVAILABLE'}
+                </span>
+              ` : (qty === 0 ? `
+                <button onclick="addToCart('${m.id}')" class="bg-saffron hover:bg-saffron-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow transition">
+                  ${isHindi ? '+ जोड़ें' : '+ Add'}
+                </button>
+              ` : `
+                <div class="flex items-center gap-2 bg-saffron/10 border border-saffron/30 rounded-xl px-2 py-0.5">
+                  <button onclick="removeFromCart('${m.id}')" class="text-saffron font-black text-sm px-1">-</button>
+                  <span class="font-extrabold text-xs text-saffron">${qty}</span>
+                  <button onclick="addToCart('${m.id}')" class="text-saffron font-black text-sm px-1">+</button>
+                </div>
+              `)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Menu Screen UI
+    function renderMenuScreen() {
+      return `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-black text-lg text-slate-900 dark:text-white">
+              ${isHindi ? 'संपूर्ण मेनू 🍱' : 'Full Menu & Thalis 🍱'}
+            </h2>
+            <span class="text-xs text-slate-500">${meals.length} Items Available</span>
+          </div>
+
+          <div class="space-y-3">
+            ${meals.map(m => renderMealCard(m)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Subscription Screen UI
+    function renderSubscriptionScreen() {
+      return `
+        <div class="space-y-4">
+          <div class="bg-gradient-to-r from-saffron to-amber-600 rounded-2xl p-4 text-white shadow-md">
+            <h2 class="font-black text-lg">${isHindi ? 'टिफिन मासिक पास 📅' : 'Monthly Tiffin Membership 📅'}</h2>
+            <p class="text-xs text-amber-100 mt-1">
+              ${isHindi ? 'घर जैसा शुद्ध भोजन प्रतिदिन समय पर' : 'Pure home-cooked meals delivered daily on time'}
+            </p>
+          </div>
+
+          <!-- Active Subscriptions -->
+          ${subscriptions.map(s => `
+            <div class="bg-white dark:bg-slate-900 border border-saffron/30 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-extrabold text-sm text-saffron">${isHindi ? s.planNameHi : s.planNameEn}</span>
+                <span class="bg-indiagreen-50 text-indiagreen text-xs font-bold px-2 py-0.5 rounded-full">
+                  ${s.isPaused ? (isHindi ? 'पॉज़ है' : 'PAUSED') : (isHindi ? 'सक्रिय' : 'ACTIVE')}
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Slot: ${s.mealSlot} • ${s.daysRemaining} days remaining</p>
+              
+              <div class="mt-3 flex gap-2">
+                <button onclick="togglePauseSub('${s.id}')" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs py-2 rounded-xl">
+                  ${s.isPaused ? (isHindi ? 'पुनः शुरू करें ▶️' : 'Resume Plan ▶️') : (isHindi ? 'पॉज़ करें ⏸️' : 'Pause Plan ⏸️')}
+                </button>
+              </div>
+            </div>
+          `).join('')}
+
+          <!-- Choose New Plan -->
+          <h3 class="font-extrabold text-sm text-slate-900 dark:text-white pt-2">
+            ${isHindi ? 'नया प्लान चुनें' : 'Available Subscription Plans'}
+          </h3>
+
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white">Maharaja Thali Pass (30 Days)</h4>
+                <p class="text-xs text-slate-500">2 Meals/Day • Free Delivery</p>
+              </div>
+              <span class="font-black text-indiagreen text-base">₹4,800</span>
+            </div>
+            <button onclick="showBuySubModal()" class="w-full bg-saffron text-white font-extrabold text-xs py-2.5 rounded-xl shadow">
+              ${isHindi ? 'पास खरीदें (BUY PASS)' : 'SUBSCRIBE NOW'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Cart Screen UI
+    function renderCartScreen() {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const discount = appliedCoupon ? (subtotal * 0.2) : 0;
+      const deliveryFee = subtotal > 300 ? 0 : 30;
+      const total = Math.max(0, subtotal - discount + deliveryFee);
+
+      if (cart.length === 0) {
+        return `
+          <div class="text-center py-12 space-y-3">
+            <span class="text-6xl">🛒</span>
+            <h3 class="font-bold text-base text-slate-800 dark:text-slate-200">
+              ${isHindi ? 'आपका कार्ट खाली है' : 'Your Tiffin Cart is Empty'}
+            </h3>
+            <p class="text-xs text-slate-500">
+              ${isHindi ? 'कृपया मेनू से अपने पसंदीदा व्यंजन जोड़ें' : 'Add delicious thalis from our daily menu'}
+            </p>
+            <button onclick="nav('menu')" class="bg-saffron text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow">
+              ${isHindi ? 'मेनू देखें' : 'EXPLORE MENU'}
+            </button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="space-y-4">
+          <h2 class="font-black text-lg text-slate-900 dark:text-white">
+            ${isHindi ? 'ऑर्डर कार्ट एवं भुगतान 🛒' : 'Order Cart & Checkout 🛒'}
+          </h2>
+
+          <!-- Cart Items -->
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-3">
+            ${cart.map(item => `
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="font-bold text-sm text-slate-900 dark:text-white">${isHindi ? item.titleHi : item.titleEn}</h4>
+                  <p class="text-xs text-indiagreen font-semibold">₹${item.price} x ${item.qty}</p>
+                </div>
+                <div class="flex items-center gap-2 bg-saffron/10 border border-saffron/30 rounded-xl px-2 py-0.5">
+                  <button onclick="removeFromCart('${item.id}')" class="text-saffron font-black text-sm px-1">-</button>
+                  <span class="font-extrabold text-xs text-saffron">${item.qty}</span>
+                  <button onclick="addToCart('${item.id}')" class="text-saffron font-black text-sm px-1">+</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Coupon -->
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <input id="coupon-input" placeholder="Coupon (BALAJI100)" class="text-xs bg-transparent outline-none flex-1 font-bold text-slate-800 dark:text-slate-100" />
+            <button onclick="applyCouponCode()" class="bg-saffron/10 text-saffron font-extrabold text-xs px-3 py-1.5 rounded-xl">
+              ${appliedCoupon ? 'Applied 20%' : 'Apply'}
+            </button>
+          </div>
+
+          <!-- Bill Summary -->
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+            <div class="flex justify-between text-slate-600 dark:text-slate-400">
+              <span>Subtotal</span>
+              <span>₹${subtotal}</span>
+            </div>
+            ${discount > 0 ? `
+              <div class="flex justify-between text-indiagreen font-bold">
+                <span>Discount (BALAJI100)</span>
+                <span>-₹${discount.toFixed(0)}</span>
+              </div>
+            ` : ''}
+            <div class="flex justify-between text-slate-600 dark:text-slate-400">
+              <span>Delivery Fee</span>
+              <span>${deliveryFee === 0 ? 'FREE' : '₹' + deliveryFee}</span>
+            </div>
+            <hr class="border-slate-200 dark:border-slate-800 my-1" />
+            <div class="flex justify-between font-black text-sm text-slate-900 dark:text-white">
+              <span>Total Payable</span>
+              <span class="text-indiagreen">₹${total.toFixed(0)}</span>
+            </div>
+          </div>
+
+          <button onclick="placeOrder(${total})" class="w-full bg-indiagreen text-white font-extrabold text-sm py-3 rounded-2xl shadow-lg hover:bg-indiagreen-700 transition">
+            ${isHindi ? 'ऑर्डर कन्फर्म करें (PLACE ORDER)' : 'PAY & PLACE ORDER'}
+          </button>
+        </div>
+      `;
+    }
+
+    // Live Tracking Screen UI
+    function renderTrackingScreen() {
+      const order = orders[0] || {
+        id: "BALAJI-9482",
+        status: "OUT_FOR_DELIVERY",
+        estimatedDeliveryTime: "15-20 Mins",
+        driverName: "Suresh Sharma 🛵",
+        driverRating: 4.9,
+        deliveryAddress: "Flat 402, Mansarovar, Jaipur"
+      };
+
+      return `
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="font-extrabold text-sm text-slate-900 dark:text-white">Live Tracking #${order.id}</h2>
+                <p class="text-xs text-saffron font-bold">ETA: ${order.estimatedDeliveryTime}</p>
+              </div>
+              <span class="bg-saffron/10 text-saffron text-xs font-bold px-2.5 py-1 rounded-full">
+                ${order.status}
+              </span>
+            </div>
+
+            <!-- Stepper -->
+            <div class="mt-4 space-y-2 text-xs">
+              <div class="flex items-center gap-2 text-indiagreen font-bold">
+                <span class="w-5 h-5 rounded-full bg-indiagreen text-white flex items-center justify-center text-[10px]">✓</span>
+                <span>Order Confirmed</span>
+              </div>
+              <div class="flex items-center gap-2 text-indiagreen font-bold">
+                <span class="w-5 h-5 rounded-full bg-indiagreen text-white flex items-center justify-center text-[10px]">✓</span>
+                <span>Chef Preparing Meals in Hot Tiffin</span>
+              </div>
+              <div class="flex items-center gap-2 text-saffron font-bold">
+                <span class="w-5 h-5 rounded-full bg-saffron text-white flex items-center justify-center text-[10px] animate-bounce">🛵</span>
+                <span>Out for Delivery (Partner: Suresh Sharma)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GPS Map graphic -->
+          <div class="bg-emerald-50 dark:bg-slate-800 rounded-2xl p-6 text-center border border-emerald-200 dark:border-slate-700">
+            <span class="text-5xl">📍 🛵 ➔ 🏠</span>
+            <p class="text-xs font-bold text-indiagreen mt-2">Live GPS Route: Mansarovar Kitchen to Destination</p>
+            <p class="text-[11px] text-slate-500">Delivery Speed: 28 km/h</p>
+          </div>
+
+          <!-- Digital Invoice Trigger -->
+          <button onclick="showInvoiceModal()" class="w-full bg-indiagreen text-white font-bold text-xs py-3 rounded-xl shadow">
+            ${isHindi ? 'डिजिटल बिल / इनवॉइस देखें 🧾' : 'VIEW DIGITAL INVOICE 🧾'}
+          </button>
+        </div>
+      `;
+    }
+
+    // Profile Screen UI
+    function renderProfileScreen() {
+      return `
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 flex items-center gap-3">
+            <div class="w-14 h-14 rounded-full bg-saffron flex items-center justify-center text-2xl text-white font-black">
+              👤
+            </div>
+            <div>
+              <h2 class="font-extrabold text-base text-slate-900 dark:text-white">Rahul Sharma</h2>
+              <p class="text-xs text-slate-500">+91 98123 45678 • rahul.s@gmail.com</p>
+            </div>
+          </div>
+
+          <!-- Wallet Card -->
+          <div class="bg-indiagreen rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
+            <div>
+              <p class="text-xs text-emerald-100">${isHindi ? 'बालाजी वॉलेट' : 'Balaji Wallet Balance'}</p>
+              <h3 class="font-black text-2xl">₹${walletBalance}</h3>
+            </div>
+            <button onclick="showAddMoneyModal()" class="bg-white text-indiagreen font-extrabold text-xs px-3 py-2 rounded-xl shadow">
+              + ${isHindi ? 'पैसे जोड़ें' : 'Add Money'}
+            </button>
+          </div>
+
+          <!-- Preferences -->
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-extrabold text-xs text-slate-900 dark:text-white uppercase tracking-wider">Settings</h3>
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span>App Language</span>
+              <button onclick="toggleLang()" class="text-saffron bg-saffron/10 px-3 py-1 rounded-lg">
+                ${isHindi ? 'हिंदी' : 'English'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Admin Panel Screen UI
+    function setAdminTab(tab) {
+      adminActiveTab = tab;
+      render();
+    }
+
+    function renderAdminScreen() {
+      const totalStock = meals.reduce((acc, m) => acc + (m.stockCount || 0), 0);
+      const lowStockRmCount = rawMaterials.filter(rm => rm.stock <= rm.threshold).length;
+
+      return `
+        <div class="space-y-4">
+          <!-- Admin Header -->
+          <div class="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center shadow-md">
+            <div>
+              <h2 class="font-black text-base">श्री बालाजी एडमिन पोर्टल</h2>
+              <p class="text-xs text-saffron font-semibold">Jaipur Kitchen & Inventory Command Center</p>
+            </div>
+            <button onclick="changeRole('CUSTOMER')" class="bg-saffron hover:bg-saffron-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow transition">
+              Exit Admin
+            </button>
+          </div>
+
+          <!-- Quick Metrics Stats -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div class="bg-saffron/10 border border-saffron/30 p-2.5 rounded-2xl text-center">
+              <span class="font-black text-lg text-saffron">128</span>
+              <p class="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Today's Orders</p>
+            </div>
+            <div class="bg-indiagreen/10 border border-indiagreen/30 p-2.5 rounded-2xl text-center">
+              <span class="font-black text-lg text-indiagreen">₹38,450</span>
+              <p class="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Daily Revenue</p>
+            </div>
+            <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-2xl text-center">
+              <span class="font-black text-lg text-amber-600 dark:text-amber-400">${totalStock}</span>
+              <p class="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Tiffins Ready</p>
+            </div>
+            <div class="bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-2xl text-center">
+              <span class="font-black text-lg text-rose-600 dark:text-rose-400">${lowStockRmCount}</span>
+              <p class="text-[10px] text-slate-600 dark:text-slate-400 font-bold">Low Stock Alert</p>
+            </div>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <div class="flex border-b border-slate-200 dark:border-slate-800 space-x-1 overflow-x-auto no-scrollbar text-xs font-bold pb-1">
+            <button onclick="setAdminTab('menu')" class="py-2 px-3 border-b-2 ${adminActiveTab === 'menu' ? 'border-saffron text-saffron font-extrabold' : 'border-transparent text-slate-500'} whitespace-nowrap">
+              🍲 Menu & Tiffins (${meals.length})
+            </button>
+            <button onclick="setAdminTab('inventory')" class="py-2 px-3 border-b-2 ${adminActiveTab === 'inventory' ? 'border-saffron text-saffron font-extrabold' : 'border-transparent text-slate-500'} whitespace-nowrap">
+              🌾 Raw Materials (${rawMaterials.length})
+            </button>
+            <button onclick="setAdminTab('calculator')" class="py-2 px-3 border-b-2 ${adminActiveTab === 'calculator' ? 'border-saffron text-saffron font-extrabold' : 'border-transparent text-slate-500'} whitespace-nowrap">
+              🧮 Requirement Calc
+            </button>
+            <button onclick="setAdminTab('notif')" class="py-2 px-3 border-b-2 ${adminActiveTab === 'notif' ? 'border-saffron text-saffron font-extrabold' : 'border-transparent text-slate-500'} whitespace-nowrap">
+              📢 Broadcast
+            </button>
+          </div>
+
+          <!-- Tab Contents -->
+          ${adminActiveTab === 'menu' ? renderAdminMenuTab() : ''}
+          ${adminActiveTab === 'inventory' ? renderAdminInventoryTab() : ''}
+          ${adminActiveTab === 'calculator' ? renderAdminCalculatorTab() : ''}
+          ${adminActiveTab === 'notif' ? renderAdminNotifTab() : ''}
+        </div>
+      `;
+    }
+
+    // Admin Tab 1: Menu & Tiffin Management
+    function renderAdminMenuTab() {
+      return `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">Daily Tiffin Menu & Price Manager</h3>
+            <button onclick="showMealModal(null)" class="bg-saffron text-white font-extrabold text-xs px-3 py-1.5 rounded-xl shadow flex items-center gap-1">
+              <span>+</span> Add New Tiffin
+            </button>
+          </div>
+
+          <div class="space-y-2.5">
+            ${meals.map(m => `
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex gap-3 items-center shadow-sm">
+                <img src="${m.imageUrl}" alt="${m.titleEn}" class="w-16 h-16 rounded-xl object-cover shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-1">
+                    <h4 class="font-bold text-xs text-slate-900 dark:text-white truncate">${m.titleEn} (${m.titleHi})</h4>
+                    <span class="text-xs font-black text-indiagreen shrink-0">₹${m.price}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 truncate mt-0.5">${m.descriptionEn}</p>
+                  <div class="flex items-center gap-2 mt-1.5">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${m.isAvailable ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}">
+                      ${m.isAvailable ? 'AVAILABLE' : 'OUT OF STOCK'}
+                    </span>
+                    <span class="text-[10px] font-semibold text-slate-600 dark:text-slate-400">
+                      Stock: <strong>${m.stockCount || 0}</strong> Tiffins
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1 shrink-0">
+                  <button onclick="showMealModal('${m.id}')" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs px-2.5 py-1 rounded-lg">
+                    ✏️ Edit
+                  </button>
+                  <button onclick="toggleMealAvailability('${m.id}')" class="text-[10px] font-bold ${m.isAvailable ? 'text-amber-600' : 'text-emerald-600'}">
+                    ${m.isAvailable ? 'Pause' : 'Enable'}
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Admin Tab 2: Raw Material Inventory
+    function renderAdminInventoryTab() {
+      return `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">Kitchen Raw Material Inventory (कच्चा माल)</h3>
+              <p class="text-[11px] text-slate-500">Track current stock levels and reorder limits</p>
+            </div>
+            <button onclick="showRawMaterialModal(null)" class="bg-indiagreen text-white font-extrabold text-xs px-3 py-1.5 rounded-xl shadow">
+              + Add Material
+            </button>
+          </div>
+
+          <div class="space-y-2">
+            ${rawMaterials.map(rm => {
+              const isLow = rm.stock <= rm.threshold;
+              const pct = Math.min(100, Math.round((rm.stock / (rm.threshold * 3)) * 100));
+
+              return `
+                <div class="bg-white dark:bg-slate-900 border ${isLow ? 'border-rose-400 dark:border-rose-800 bg-rose-50/20' : 'border-slate-200 dark:border-slate-800'} rounded-2xl p-3 shadow-sm">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xl">${rm.icon || '📦'}</span>
+                      <div>
+                        <h4 class="font-bold text-xs text-slate-900 dark:text-white">${rm.nameEn} <span class="text-slate-500 font-normal">(${rm.nameHi})</span></h4>
+                        <p class="text-[10px] text-slate-500">Threshold: ${rm.threshold} ${rm.unit} • Unit Cost: ₹${rm.costPerUnit}/${rm.unit}</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <span class="font-extrabold text-sm ${isLow ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'}">
+                        ${rm.stock} ${rm.unit}
+                      </span>
+                      <div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isLow ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'}">
+                          ${isLow ? '⚠️ LOW STOCK' : 'OK'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Progress Bar -->
+                  <div class="mt-2.5 flex items-center gap-2">
+                    <div class="flex-1 bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                      <div class="h-full ${isLow ? 'bg-rose-500' : 'bg-indiagreen'} transition-all duration-300" style="width: ${pct}%"></div>
+                    </div>
+                    <button onclick="showRawMaterialModal('${rm.id}')" class="text-xs font-bold text-saffron px-2 py-0.5 bg-saffron/10 rounded-lg shrink-0">
+                      ✏️ Edit Stock
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Admin Tab 3: Daily Requirement Calculator
+    function renderAdminCalculatorTab() {
+      const targetTiffins = window.calculatorTiffinCount || 100;
+
+      const estimates = [
+        { name: "Atta (Wheat Flour)", perTiffin: 0.12, unit: "kg", icon: "🌾", rmId: "rm1" },
+        { name: "Desi Ghee", perTiffin: 0.025, unit: "L", icon: "🧈", rmId: "rm2" },
+        { name: "Fresh Paneer", perTiffin: 0.08, unit: "kg", icon: "🧀", rmId: "rm3" },
+        { name: "Yellow & Toor Dal", perTiffin: 0.07, unit: "kg", icon: "🫘", rmId: "rm4" },
+        { name: "Basmati Rice", perTiffin: 0.08, unit: "kg", icon: "🍚", rmId: "rm5" },
+        { name: "Milk / Curd", perTiffin: 0.15, unit: "L", icon: "🥛", rmId: "rm6" },
+        { name: "Cooking Oil", perTiffin: 0.03, unit: "L", icon: "🛢️", rmId: "rm7" },
+        { name: "Indian Spices", perTiffin: 0.015, unit: "kg", icon: "🌶️", rmId: "rm8" }
+      ];
+
+      return `
+        <div class="space-y-3">
+          <div class="bg-gradient-to-r from-saffron/10 to-amber-500/10 border border-saffron/30 rounded-2xl p-3.5">
+            <h3 class="font-extrabold text-xs text-saffron uppercase tracking-wider">Daily Kitchen Raw Material Estimator</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mt-0.5">Calculate total raw ingredients required for today's tiffin batch.</p>
+
+            <div class="mt-3 flex items-center gap-2">
+              <label class="text-xs font-bold text-slate-700 dark:text-slate-200">Target Tiffins:</label>
+              <input type="number" value="${targetTiffins}" onchange="window.calculatorTiffinCount=parseInt(this.value)||100; render();" class="w-24 text-sm font-extrabold text-saffron p-1.5 rounded-xl border border-saffron/40 bg-white dark:bg-slate-900 text-center" />
+              <span class="text-xs font-semibold text-slate-500">Tiffins</span>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 space-y-2">
+            <h4 class="font-bold text-xs text-slate-900 dark:text-white flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+              <span>Required Ingredients</span>
+              <span>Status in Inventory</span>
+            </h4>
+            
+            <div class="space-y-2 text-xs">
+              ${estimates.map(e => {
+                const required = (e.perTiffin * targetTiffins).toFixed(1);
+                const currentRm = rawMaterials.find(r => r.id === e.rmId);
+                const inStock = currentRm ? currentRm.stock : 0;
+                const isDeficit = inStock < parseFloat(required);
+
+                return `
+                  <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2">
+                      <span>${e.icon}</span>
+                      <div>
+                        <span class="font-bold text-slate-800 dark:text-slate-100">${e.name}</span>
+                        <p class="text-[10px] text-slate-500">Req: <strong>${required} ${e.unit}</strong></p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-xs font-black ${isDeficit ? 'text-rose-600' : 'text-emerald-600'}">In Stock: ${inStock} ${e.unit}</p>
+                      <span class="text-[10px] font-bold ${isDeficit ? 'text-rose-500' : 'text-slate-400'}">
+                        ${isDeficit ? `⚠️ Need +${(parseFloat(required) - inStock).toFixed(1)} ${e.unit}` : '✓ Stock Ready'}
+                      </span>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Admin Tab 4: Push Notification
+    function renderAdminNotifTab() {
+      return `
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Send Broadcast Notification 📢</h3>
+          <p class="text-xs text-slate-500">Send an instant alert to all app users about today's special tiffin or discount offers.</p>
+          <input id="notif-title" placeholder="Title (e.g. Special Rajasthani Dal Baati Today!)" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-medium" />
+          <textarea id="notif-body" rows="2" placeholder="Message Body (e.g. Order before 12 PM and get free Butter Milk!)" class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-medium"></textarea>
+          <button onclick="sendNotif()" class="w-full bg-saffron hover:bg-saffron-600 text-white font-extrabold text-xs py-2.5 rounded-xl shadow transition">BROADCAST TO ALL USERS</button>
+        </div>
+      `;
+    }
+
+    // Delivery Partner Screen UI
+    function renderDeliveryBoyScreen() {
+      return `
+        <div class="space-y-4">
+          <div class="bg-indiagreen text-white p-4 rounded-2xl flex justify-between items-center">
+            <div>
+              <h2 class="font-black text-base">Delivery Partner App 🛵</h2>
+              <p class="text-xs text-emerald-100">Suresh Sharma • Mansarovar Zone</p>
+            </div>
+            <button onclick="changeRole('CUSTOMER')" class="bg-white text-indiagreen text-xs font-bold px-3 py-1.5 rounded-lg">Exit Partner</button>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="font-extrabold text-sm">#BALAJI-9482</span>
+              <span class="bg-saffron/10 text-saffron text-xs font-bold px-2 py-0.5 rounded-full">Out For Delivery</span>
+            </div>
+            <p class="text-xs font-medium text-slate-600 dark:text-slate-300">Customer: Rahul Sharma (+91 98123 45678)</p>
+            <p class="text-xs text-slate-500">Address: Flat 402, Mansarovar, Jaipur</p>
+
+            <button onclick="verifyOtpModal()" class="w-full bg-indiagreen text-white font-extrabold text-xs py-2.5 rounded-xl">
+              VERIFY OTP & MARK DELIVERED
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Action handlers
+    function togglePauseSub(subId) {
+      const sub = subscriptions.find(s => s.id === subId);
+      if (sub) {
+        sub.isPaused = !sub.isPaused;
+        render();
+      }
+    }
+
+    function applyCouponCode() {
+      appliedCoupon = 'BALAJI100';
+      render();
+    }
+
+    function placeOrder(amount) {
+      if (cart.length === 0) return;
+      const createdOrder = {
+        id: "BALAJI-" + Math.floor(1000 + Math.random() * 9000),
+        items: [...cart],
+        totalAmount: amount,
+        status: "CONFIRMED",
+        createdAt: "Just Now",
+        estimatedDeliveryTime: "20-25 Mins",
+        driverName: "Suresh Sharma 🛵",
+        driverRating: 4.9,
+        deliveryAddress: "Flat 402, Mansarovar, Jaipur"
+      };
+      orders.unshift(createdOrder);
+      cart = [];
+      updateCartBadge();
+      currentScreen = 'tracking';
+      render();
+    }
+
+    function showAddMoneyModal() {
+      const modal = document.getElementById('modal-container');
+      const content = document.getElementById('modal-content');
+      content.innerHTML = `
+        <h3 class="font-bold text-base text-slate-900 dark:text-white mb-2">Add Money to Balaji Wallet</h3>
+        <input id="add-amt-input" value="500" type="number" class="w-full text-base font-bold p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent mb-4" />
+        <div class="flex gap-2">
+          <button onclick="closeModal()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs py-2.5 rounded-xl">Cancel</button>
+          <button onclick="confirmAddMoney()" class="flex-1 bg-saffron text-white font-bold text-xs py-2.5 rounded-xl">PAY VIA UPI</button>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function confirmAddMoney() {
+      const val = parseFloat(document.getElementById('add-amt-input').value) || 500;
+      walletBalance += val;
+      closeModal();
+      render();
+    }
+
+    function showInvoiceModal() {
+      const modal = document.getElementById('modal-container');
+      const content = document.getElementById('modal-content');
+      content.innerHTML = `
+        <div class="text-center space-y-2">
+          <h3 class="font-extrabold text-base text-saffron">TAX INVOICE / बिल</h3>
+          <p class="text-xs text-slate-500">Balaji Tiffin Service • GSTIN: 08AABCB1234F1ZB</p>
+          <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl text-left text-xs space-y-1">
+            <p><strong>Order ID:</strong> BALAJI-9482</p>
+            <p><strong>Date:</strong> 2026-07-25</p>
+            <p><strong>Total Paid:</strong> ₹360 (UPI)</p>
+          </div>
+          <button onclick="closeModal()" class="w-full bg-indiagreen text-white font-bold text-xs py-2 rounded-xl mt-3">CLOSE</button>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function verifyOtpModal() {
+      const modal = document.getElementById('modal-container');
+      const content = document.getElementById('modal-content');
+      content.innerHTML = `
+        <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-2">Enter Customer OTP</h3>
+        <input placeholder="4819" maxlength="4" class="w-full text-center text-lg font-black tracking-widest p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent mb-3" />
+        <button onclick="closeModal()" class="w-full bg-indiagreen text-white font-bold text-xs py-2.5 rounded-xl">VERIFY & DELIVER</button>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function sendNotif() {
+      alert("Broadcast push notification sent to all customer app instances!");
+      document.getElementById('notif-title').value = '';
+      document.getElementById('notif-body').value = '';
+    }
+
+    // Admin Meal & Raw Material Modal Actions
+    function showMealModal(mealId) {
+      const meal = mealId ? meals.find(m => m.id === mealId) : null;
+      const isEdit = !!meal;
+
+      const modal = document.getElementById('modal-container');
+      const content = document.getElementById('modal-content');
+
+      const defaultImg = meal ? meal.imageUrl : photoPresets[0].url;
+
+      content.innerHTML = `
+        <div class="space-y-3 max-h-[80vh] overflow-y-auto no-scrollbar pr-1">
+          <div class="flex justify-between items-center">
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">
+              ${isEdit ? 'Edit Tiffin Item' : 'Add New Tiffin Item'}
+            </h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+          </div>
+
+          <form onsubmit="saveMealForm(event, '${mealId || ''}')" class="space-y-3 text-xs">
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Title (English)</label>
+              <input id="m-title-en" value="${meal ? meal.titleEn : ''}" required placeholder="e.g. Kadhai Paneer Thali" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold text-slate-900 dark:text-white" />
+            </div>
+
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Title (Hindi - हिंदी)</label>
+              <input id="m-title-hi" value="${meal ? meal.titleHi : ''}" required placeholder="e.g. कड़ाई पनीर थाली" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold text-slate-900 dark:text-white" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Price (₹)</label>
+                <input id="m-price" type="number" value="${meal ? meal.price : 150}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-bold text-indiagreen" />
+              </div>
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Stock (Tiffins)</label>
+                <input id="m-stock" type="number" value="${meal ? (meal.stockCount || 30) : 30}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-bold text-slate-900 dark:text-white" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Calories (kcal)</label>
+                <input id="m-calories" type="number" value="${meal ? meal.calories : 650}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold text-slate-900 dark:text-white" />
+              </div>
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Category</label>
+                <select id="m-category" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none font-semibold">
+                  <option value="SPECIAL_THALI" ${meal && meal.category === 'SPECIAL_THALI' ? 'selected' : ''}>Special Thali</option>
+                  <option value="MINI_MEAL" ${meal && meal.category === 'MINI_MEAL' ? 'selected' : ''}>Mini Tiffin</option>
+                  <option value="DIET_MEAL" ${meal && meal.category === 'DIET_MEAL' ? 'selected' : ''}>Diet/Fitness</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Food Photo Selector -->
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Food Photo URL</label>
+              <input id="m-image" value="${defaultImg}" required onchange="document.getElementById('m-img-preview').src=this.value" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none text-[11px] font-mono" />
+              
+              <div class="mt-2 flex items-center gap-2">
+                <img id="m-img-preview" src="${defaultImg}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 dark:border-slate-700" />
+                <div class="flex-1">
+                  <p class="text-[10px] font-bold text-slate-500 mb-1">Or Pick Preset HD Photo:</p>
+                  <div class="flex gap-1 overflow-x-auto no-scrollbar pb-1">
+                    ${photoPresets.map(p => `
+                      <button type="button" onclick="selectPresetPhoto('${p.url}')" class="text-[10px] font-bold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 hover:bg-saffron/20 border border-slate-200 dark:border-slate-700 rounded-md whitespace-nowrap">
+                        ${p.name}
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Description (English)</label>
+              <textarea id="m-desc-en" rows="2" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none">${meal ? meal.descriptionEn : ''}</textarea>
+            </div>
+
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Description (Hindi)</label>
+              <textarea id="m-desc-hi" rows="2" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none">${meal ? meal.descriptionHi : ''}</textarea>
+            </div>
+
+            <div class="flex items-center gap-2 py-1">
+              <input type="checkbox" id="m-available" ${!meal || meal.isAvailable ? 'checked' : ''} class="w-4 h-4 accent-saffron" />
+              <label for="m-available" class="font-bold text-slate-800 dark:text-slate-200">Available for Ordering</label>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              ${isEdit ? `
+                <button type="button" onclick="deleteMeal('${meal.id}')" class="bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold px-3 py-2.5 rounded-xl">
+                  🗑️
+                </button>
+              ` : ''}
+              <button type="button" onclick="closeModal()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 rounded-xl">
+                Cancel
+              </button>
+              <button type="submit" class="flex-1 bg-saffron text-white font-extrabold py-2.5 rounded-xl shadow">
+                Save Tiffin
+              </button>
+            </div>
+          </form>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function selectPresetPhoto(url) {
+      document.getElementById('m-image').value = url;
+      document.getElementById('m-img-preview').src = url;
+    }
+
+    function saveMealForm(e, mealId) {
+      e.preventDefault();
+      const titleEn = document.getElementById('m-title-en').value;
+      const titleHi = document.getElementById('m-title-hi').value;
+      const price = parseFloat(document.getElementById('m-price').value) || 100;
+      const stockCount = parseInt(document.getElementById('m-stock').value) || 0;
+      const calories = parseInt(document.getElementById('m-calories').value) || 500;
+      const category = document.getElementById('m-category').value;
+      const imageUrl = document.getElementById('m-image').value;
+      const descriptionEn = document.getElementById('m-desc-en').value;
+      const descriptionHi = document.getElementById('m-desc-hi').value;
+      const isAvailable = document.getElementById('m-available').checked;
+
+      if (mealId) {
+        const meal = meals.find(m => m.id === mealId);
+        if (meal) {
+          meal.titleEn = titleEn;
+          meal.titleHi = titleHi;
+          meal.price = price;
+          meal.stockCount = stockCount;
+          meal.calories = calories;
+          meal.category = category;
+          meal.imageUrl = imageUrl;
+          meal.descriptionEn = descriptionEn;
+          meal.descriptionHi = descriptionHi;
+          meal.isAvailable = isAvailable;
+        }
+      } else {
+        meals.push({
+          id: "m" + Date.now(),
+          titleEn,
+          titleHi,
+          price,
+          stockCount,
+          calories,
+          category,
+          imageUrl,
+          descriptionEn,
+          descriptionHi,
+          isAvailable
+        });
+      }
+
+      closeModal();
+      render();
+    }
+
+    function deleteMeal(mealId) {
+      if (confirm("Are you sure you want to remove this tiffin item from the menu?")) {
+        meals = meals.filter(m => m.id !== mealId);
+        closeModal();
+        render();
+      }
+    }
+
+    function toggleMealAvailability(mealId) {
+      const meal = meals.find(m => m.id === mealId);
+      if (meal) {
+        meal.isAvailable = !meal.isAvailable;
+        render();
+      }
+    }
+
+    function showRawMaterialModal(rmId) {
+      const rm = rmId ? rawMaterials.find(r => r.id === rmId) : null;
+      const isEdit = !!rm;
+
+      const modal = document.getElementById('modal-container');
+      const content = document.getElementById('modal-content');
+
+      content.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">
+              ${isEdit ? 'Edit Raw Material Stock' : 'Add Kitchen Raw Material'}
+            </h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+          </div>
+
+          <form onsubmit="saveRawMaterialForm(event, '${rmId || ''}')" class="space-y-3 text-xs">
+            <div class="grid grid-cols-4 gap-2 items-center">
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Icon</label>
+                <input id="rm-icon" value="${rm ? rm.icon : '📦'}" class="w-full text-center p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent text-lg" />
+              </div>
+              <div class="col-span-3">
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Item Name (English)</label>
+                <input id="rm-name-en" value="${rm ? rm.nameEn : ''}" required placeholder="e.g. Wheat Flour (Atta)" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold" />
+              </div>
+            </div>
+
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Item Name (Hindi - हिंदी)</label>
+              <input id="rm-name-hi" value="${rm ? rm.nameHi : ''}" required placeholder="e.g. आटा" class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold" />
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Current Stock</label>
+                <input id="rm-stock" type="number" step="0.1" value="${rm ? rm.stock : 10}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-bold text-saffron" />
+              </div>
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Unit</label>
+                <input id="rm-unit" value="${rm ? rm.unit : 'kg'}" placeholder="kg / L" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold" />
+              </div>
+              <div>
+                <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Low Threshold</label>
+                <input id="rm-threshold" type="number" step="0.1" value="${rm ? rm.threshold : 5}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold text-rose-600" />
+              </div>
+            </div>
+
+            <div>
+              <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Cost Per Unit (₹)</label>
+              <input id="rm-cost" type="number" step="0.1" value="${rm ? rm.costPerUnit : 50}" required class="w-full p-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent outline-none font-semibold text-indiagreen" />
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              ${isEdit ? `
+                <button type="button" onclick="deleteRawMaterial('${rm.id}')" class="bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold px-3 py-2.5 rounded-xl">
+                  🗑️
+                </button>
+              ` : ''}
+              <button type="button" onclick="closeModal()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 rounded-xl">
+                Cancel
+              </button>
+              <button type="submit" class="flex-1 bg-indiagreen text-white font-extrabold py-2.5 rounded-xl shadow">
+                Save Stock
+              </button>
+            </div>
+          </form>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function saveRawMaterialForm(e, rmId) {
+      e.preventDefault();
+      const icon = document.getElementById('rm-icon').value || '📦';
+      const nameEn = document.getElementById('rm-name-en').value;
+      const nameHi = document.getElementById('rm-name-hi').value;
+      const stock = parseFloat(document.getElementById('rm-stock').value) || 0;
+      const unit = document.getElementById('rm-unit').value || 'kg';
+      const threshold = parseFloat(document.getElementById('rm-threshold').value) || 5;
+      const costPerUnit = parseFloat(document.getElementById('rm-cost').value) || 0;
+
+      if (rmId) {
+        const rm = rawMaterials.find(r => r.id === rmId);
+        if (rm) {
+          rm.icon = icon;
+          rm.nameEn = nameEn;
+          rm.nameHi = nameHi;
+          rm.stock = stock;
+          rm.unit = unit;
+          rm.threshold = threshold;
+          rm.costPerUnit = costPerUnit;
+        }
+      } else {
+        rawMaterials.push({
+          id: "rm" + Date.now(),
+          icon,
+          nameEn,
+          nameHi,
+          stock,
+          unit,
+          threshold,
+          costPerUnit
+        });
+      }
+
+      closeModal();
+      render();
+    }
+
+    function deleteRawMaterial(rmId) {
+      if (confirm("Are you sure you want to remove this raw material item from inventory?")) {
+        rawMaterials = rawMaterials.filter(r => r.id !== rmId);
+        closeModal();
+        render();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modal-container').classList.add('hidden');
+    }
+
+    init();
+  </script>
+</body>
+</html>

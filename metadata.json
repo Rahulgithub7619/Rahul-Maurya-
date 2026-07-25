@@ -1,0 +1,6 @@
+{
+  "name": "Shree Balaji Tiffin Service",
+  "description": "Production-ready Tiffin Service Android App with Subscriptions, Menu Management, Orders, Hindi/English support, Dark/Light theme, Admin Panel & Delivery Boy Portal",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

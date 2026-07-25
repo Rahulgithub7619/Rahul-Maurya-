@@ -1,0 +1,14 @@
+{
+  "name": "balaji-tiffin-service",
+  "version": "1.0.0",
+  "description": "Balaji Tiffin Service - Production Android & Web App",
+  "main": "server.js",
+  "scripts": {
+    "build": "echo 'Build complete'",
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
